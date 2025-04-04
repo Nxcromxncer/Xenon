@@ -12,7 +12,7 @@ const Login = () => {
       const token = await result.user.getIdToken(); // Get Firebase token
 
       const response = await fetch(
-        "https:b297-2409-40d7-fd-c5af-829b-f0a7-b1f0-8cdb.ngrok-free.app/login",
+        "https:9a33-2409-40d7-a4-790e-865a-a3c5-3f7d-fcf8.ngrok-free.app/login",
         {
           // Use backend PC's IP
           method: "POST",

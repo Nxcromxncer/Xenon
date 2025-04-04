@@ -4,12 +4,12 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <Link to="/" className="navbar-logo">
-          MyApp
+        <Link to="/home" className="navbar-logo">
+          XENON
         </Link>
         <div className="navbar-links">
-          <Link to="/login" className="navbar-link">
-            Login
+          <Link to="/profile" className="navbar-link">
+            Profile
           </Link>
         </div>
       </div>
