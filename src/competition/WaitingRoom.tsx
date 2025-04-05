@@ -7,7 +7,7 @@ const WaitingRoom = () => {
   const navigate = useNavigate();
   const { teamName, isCreator } = location.state || {};
   const [participants, setParticipants] = useState(1);
-  const [countdown, setCountdown] = useState(5); // Simulated countdown
+  const [countdown, setCountdown] = useState(15); // Simulated countdown
 
   // Simulate participants joining
   useEffect(() => {
