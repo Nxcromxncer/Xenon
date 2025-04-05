@@ -38,7 +38,7 @@ app.use(async (req, res, next) => {
 });
 
 // Routes
-app.use('/api', routes);
+app.use('/api/create', routes);
 
 // Error handling
 app.use((err, req, res, next) => {
