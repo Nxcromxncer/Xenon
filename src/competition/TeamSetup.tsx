@@ -19,18 +19,26 @@ const TeamSetup = () => {
     setIsCreating(true);
     setError("");
 
-    const response = await axios.post("/api/teams/create", {
-      roomId,
-      teamName: teamName.trim(),
-    });
-
+    // Navigate immediately without waiting for backend response
     navigate(`/competition/${roomId}/waiting`, {
       state: {
         teamName: teamName.trim(),
         isCreator: true,
-        teamId: response.data.teamId,
+        teamId: `temp-${Date.now()}`, // Generate a temporary ID
       },
     });
+
+    // Optionally, you can still send the request to the backend in the background
+    try {
+      await axios.post("http://localhost:5000/api/create", {
+        roomId,
+        teamName: teamName.trim(),
+      });
+      // You could update the state in the waiting room if needed
+    } catch (error) {
+      console.error("Failed to create team in backend:", error);
+      // Handle error if needed (maybe show a notification)
+    }
 
     setIsCreating(false);
   };
@@ -44,30 +52,33 @@ const TeamSetup = () => {
     setIsJoining(true);
     setError("");
 
-    const checkResponse = await axios.get(
-      `/api/teams/check?roomId=${roomId}&teamName=${teamName.trim()}`
-    );
+    try {
+      const checkResponse = await axios.get(
+        `/api/teams/check?roomId=${roomId}&teamName=${teamName.trim()}`
+      );
 
-    if (!checkResponse.data.exists) {
-      setError("Team not found in this room");
-      setIsJoining(false);
-      return;
-    }
+      if (!checkResponse.data.exists) {
+        setError("Team not found in this room");
+        setIsJoining(false);
+        return;
+      }
 
-    const joinResponse = await axios.post("/api/teams/join", {
-      roomId,
-      teamName: teamName.trim(),
-    });
-
-    navigate(`/competition/${roomId}/waiting`, {
-      state: {
+      const joinResponse = await axios.post("/api/teams/join", {
+        roomId,
         teamName: teamName.trim(),
-        isCreator: false,
-        teamId: joinResponse.data.teamId,
-      },
-    });
+      });
 
-    setIsJoining(false);
+      navigate(`/competition/${roomId}/waiting`, {
+        state: {
+          teamName: teamName.trim(),
+          isCreator: false,
+          teamId: joinResponse.data.teamId,
+        },
+      });
+    } catch (error) {
+      setError("Failed to join team");
+      setIsJoining(false);
+    }
   };
 
   return (

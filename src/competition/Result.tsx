@@ -1,57 +1,42 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
-type Result = {
+type ProblemResult = {
+  id: number;
+  title: string;
+  solved: boolean;
+  timeTaken: string;
+  attempts: number;
+};
+
+type ResultData = {
   rank: number;
   teamName: string;
   totalSolved: number;
   totalScore: number;
-  problems: {
-    id: number;
-    title: string;
-    solved: boolean;
-    timeTaken: string;
-    attempts: number;
-  }[];
+  problems: ProblemResult[];
 };
 
 const Result = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Mock data
-  const results: Result = {
+  // Get timeTaken from navigation state
+  const timeTaken = location.state?.timeTaken || "0s";
+
+  // Mock data with real time from ProblemIDE
+  const results: ResultData = {
     rank: 1,
-    teamName: "Team Awesome",
-    totalSolved: 3,
-    totalScore: 300,
+    teamName: "Xenon",
+    totalSolved: 1,
+    totalScore: 100,
     problems: [
       {
         id: 1,
-        title: "Two Sum",
+        title: "My first code",
         solved: true,
-        timeTaken: "15:30",
+        timeTaken: timeTaken,
         attempts: 1,
-      },
-      {
-        id: 2,
-        title: "Binary Search",
-        solved: true,
-        timeTaken: "25:10",
-        attempts: 2,
-      },
-      {
-        id: 3,
-        title: "Graph Traversal",
-        solved: true,
-        timeTaken: "40:20",
-        attempts: 3,
-      },
-      {
-        id: 4,
-        title: "Dynamic Programming",
-        solved: false,
-        timeTaken: "-",
-        attempts: 5,
       },
     ],
   };

@@ -11,15 +11,31 @@ const Home = () => {
       players: 24,
       difficulty: "Easy",
       category: "Python",
-      timeLeft: "2h 15m",
+      timeLeft: "30m",
     },
     {
       id: 2,
+      name: "Python Add two numbers",
+      players: 18,
+      difficulty: "Easy",
+      category: "Python",
+      timeLeft: "10m",
+    },
+    {
+      id: 3,
       name: "JavaScript Basics",
       players: 18,
       difficulty: "Easy",
       category: "JavaScript",
-      timeLeft: "1h 30m",
+      timeLeft: "20m",
+    },
+    {
+      id: 4,
+      name: "Javascript-Duo",
+      players: 18,
+      difficulty: "Easy",
+      category: "JavaScript",
+      timeLeft: "10m",
     },
   ];
 

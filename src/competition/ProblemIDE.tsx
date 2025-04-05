@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Editor from "@monaco-editor/react";
 
 // Judge0 configuration
 const JUDGE0_API_URL = "https://judge0-ce.p.rapidapi.com";
-const JUDGE0_API_KEY = "4b742a0bd0msh5ef3210484b92c0p1c8952jsn72bbffb2c7f0"; // Replace with your actual API key
+const JUDGE0_API_KEY = "4b742a0bd0msh5ef3210484b92c0p1c8952jsn72bbffb2c7f0";
 
 const languageIds = {
   python: 71,
@@ -21,8 +21,8 @@ const ProblemIDE = () => {
   const problem = {
     id: 1,
     title: "Python-Start Challenge",
-    description: "Write a program that prints 'Hello World'",
-    solution: "Hello World\n", // Note: Judge0 adds newline to output
+    description: "Write a program to print 'My first code'",
+    solution: "My first code\n",
     starterCode: {
       python: 'print("Hello World")',
       javascript: 'console.log("Hello World")',
@@ -38,6 +38,26 @@ const ProblemIDE = () => {
   const [output, setOutput] = useState("");
   const [isExecuting, setIsExecuting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [timeTaken, setTimeTaken] = useState<string>("0s");
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Start timer when component mounts
+  useEffect(() => {
+    setStartTime(Date.now());
+
+    // Update time every second
+    timerRef.current = setInterval(() => {
+      if (startTime) {
+        const seconds = Math.floor((Date.now() - startTime) / 1000);
+        setTimeTaken(`${seconds}s`);
+      }
+    }, 1000);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [startTime]);
 
   const handleLanguageChange = (newLanguage: string) => {
     setLanguage(newLanguage);
@@ -51,7 +71,6 @@ const ProblemIDE = () => {
     setOutput("Executing...");
 
     try {
-      // Submit code to Judge0
       const submissionResponse = await fetch(`${JUDGE0_API_URL}/submissions`, {
         method: "POST",
         headers: {
@@ -64,13 +83,11 @@ const ProblemIDE = () => {
           language_id: languageIds[language as keyof typeof languageIds],
           stdin: "",
           expected_output: problem.solution,
-          wait: true, // Wait for execution to complete
+          wait: true,
         }),
       });
 
       const submissionData = await submissionResponse.json();
-
-      // Get execution results
       const resultResponse = await fetch(
         `${JUDGE0_API_URL}/submissions/${submissionData.token}?base64_encoded=false`,
         {
@@ -83,14 +100,21 @@ const ProblemIDE = () => {
 
       const resultData = await resultResponse.json();
 
-      // Handle response
       if (resultData.status?.description === "Accepted") {
         setOutput(resultData.stdout || "No output");
 
         if (isSubmission) {
           setIsSubmitted(true);
           if (resultData.stdout === problem.solution) {
-            setTimeout(() => navigate(`/competition/${roomId}/result`), 1000);
+            // Stop the timer
+            if (timerRef.current) clearInterval(timerRef.current);
+
+            // Navigate with timeTaken
+            setTimeout(() => {
+              navigate(`/competition/${roomId}/result`, {
+                state: { timeTaken },
+              });
+            }, 1000);
           }
         }
       } else {
@@ -115,15 +139,14 @@ const ProblemIDE = () => {
 
   return (
     <div className="problem-ide-container">
-      {/* Problem Section */}
       <div className="problem-section">
         <h2>{problem.title}</h2>
         <div className="problem-description">
           <p>{problem.description}</p>
+          <p className="time-taken">Time taken: {timeTaken}</p>
         </div>
       </div>
 
-      {/* IDE Section */}
       <div className="ide-section">
         <div className="ide-controls">
           <select
@@ -163,7 +186,6 @@ const ProblemIDE = () => {
           />
         </div>
 
-        {/* Execution Panel */}
         <div className="execution-panel">
           <button
             onClick={handleRun}
