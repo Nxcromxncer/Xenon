@@ -1,10 +1,23 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import "../styles.css";
 
 const About = () => {
   return (
     <div className="bg-white min-vh-100">
+      {/* Navbar */}
+      <nav className="navbar">
+        <div className="navbar-container">
+          <Link to="/" className="navbar-logo">
+            XENON
+          </Link>
+          <div className="navbar-links">
+            <Link to="/login" className="navbar-link">
+              Login
+            </Link>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <div className="about-hero">
         <div className="about-hero-content">

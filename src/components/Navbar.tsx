@@ -8,8 +8,8 @@ const Navbar = () => {
           XENON
         </Link>
         <div className="navbar-links">
-          <Link to="/profile" className="navbar-link">
-            Profile
+          <Link to="/" className="navbar-link">
+            Log Out
           </Link>
         </div>
       </div>

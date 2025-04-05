@@ -1,33 +1,40 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import Login from "./pages/Login";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import About from "./pages/About";
+import Login from "./pages/Login";
 import Home from "./pages/Home";
-import JoinTeam from "./team/JoinTeam";
-import CreateTeam from "./team/CreateTeam";
+import JoinRoom from "./room/JoinRoom";
+import CreateRoom from "./room/CreateRoom";
+import ProblemIDE from "./competition/ProblemIDE";
+import Result from "./competition/Result";
+import Layout from "./Layout";
+import TeamSetup from "./competition/TeamSetup";
+import WaitingRoom from "./competition/WaitingRoom";
 
-import "./styles.css";
-
-const App = () => {
+function App() {
   return (
-    <Router>
-      <div className="app">
-        <Navbar />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<About />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/home" element={<Home />}>
-              <Route path="join" element={<JoinTeam />} />
-              <Route path="create" element={<CreateTeam />} />
-            </Route>
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <BrowserRouter>
+      <Routes>
+        {/* Pages without layout */}
+        <Route path="/" element={<About />} />
+        <Route path="/login" element={<Login />} />
+
+        {/* Pages with layout */}
+        <Route element={<Layout />}>
+          <Route path="/home" element={<Home />}>
+            <Route path="join" element={<JoinRoom />} />
+            <Route path="create" element={<CreateRoom />} />
+          </Route>
+          <Route path="/competition/:roomId/team" element={<TeamSetup />} />
+          <Route
+            path="/competition/:roomId/waiting"
+            element={<WaitingRoom />}
+          />
+          <Route path="/competition/:roomId/problem" element={<ProblemIDE />} />
+          <Route path="/competition/:roomId/result" element={<Result />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
-};
+}
 
 export default App;
