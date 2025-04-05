@@ -1,0 +1,11 @@
+serviceAccountKey.json  # Firebase Admin SDK credentials
+.env                  # All environment variables
+.firebase/            # Firebase CLI cache
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+
