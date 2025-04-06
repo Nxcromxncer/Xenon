@@ -70,7 +70,7 @@ const Result = () => {
           <tbody>
             {results.problems.map((problem) => (
               <tr key={problem.id}>
-                <td>{problem.title}</td>
+                <td>{roomId}</td>
                 <td className={problem.solved ? "solved" : "unsolved"}>
                   {problem.solved ? "✓" : "✗"}
                 </td>

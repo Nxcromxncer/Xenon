@@ -47,10 +47,10 @@ const WaitingRoom = () => {
       <div className="participants-section">
         <h3>Participants ({participants}/4)</h3>
         <div className="participants-list">
-          <div className="participant">Team Member 1</div>
-          {participants > 1 && <div className="participant">Team Member 2</div>}
-          {participants > 2 && <div className="participant">Team Member 3</div>}
-          {participants > 3 && <div className="participant">Team Member 4</div>}
+          <div className="participant">Divyansh</div>
+          {participants > 1 && <div className="participant">Nehal</div>}
+          {participants > 2 && <div className="participant">Nikhil</div>}
+          {participants > 3 && <div className="participant">Shivam</div>}
         </div>
       </div>
 
